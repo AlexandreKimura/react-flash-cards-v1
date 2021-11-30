@@ -1,13 +1,24 @@
-import { useState } from "react"
-
-export default function FlashCard({ title = 'Título do card', description = 'Descrição do card, que pode conter mais palavras que o título' }) {
+export default function FlashCard({ 
+  id,
+  title = 'Título do card', 
+  description = 'Descrição do card, que pode conter mais palavras que o título',
+  showFlashCardTitle = true, 
+  onToggleFlashCard = null,
+}) {
   
-  const [showTitle, setShowTitle] = useState(true)
+  /*const [showTitle, setShowTitle] = useState(showFlashCardTitle)
 
-  const fontSizeClassName = showTitle ? 'text-xl' : 'text-sm'
+  useEffect(() => {
+    setShowTitle(showFlashCardTitle)
+  }, [showFlashCardTitle])*/
+
+  const fontSizeClassName = showFlashCardTitle ? 'text-xl' : 'text-sm'
 
   function handleCardClick() {
-    setShowTitle(currentShowTitle => !currentShowTitle)
+    //setShowTitle(currentShowTitle => !currentShowTitle)
+    if(onToggleFlashCard) {
+      onToggleFlashCard(id)
+    }
   }
 
   return (
@@ -17,7 +28,7 @@ export default function FlashCard({ title = 'Título do card', description = 'De
       style={{fontFamily: "'JetBrains Mono', monospace"}}
       onClick={handleCardClick}
       >
-      {showTitle ? title : description}
+      {showFlashCardTitle ? title : description}
     </div>
   )
 }

@@ -102,6 +102,11 @@ export default function FlashCardsPage() {
     setSelectedTab(tabIndex)
   }
 
+  function handleNewFlashCard() {
+    setCreateMode(true)
+    setSelectedFlashCard(null)
+  }
+
   let mainJsx = (
     <div className="flex justify-center mt-4">
       <Loading />
@@ -137,6 +142,9 @@ export default function FlashCardsPage() {
             })}
           </TabPanel>
           <TabPanel>
+            <div className="my-4">
+              <Button onButtonClick={handleNewFlashCard}>Novo Flash Card</Button>
+            </div>
             <FlashCardForm createMode={createMode}></FlashCardForm>
           </TabPanel>
           <TabPanel>

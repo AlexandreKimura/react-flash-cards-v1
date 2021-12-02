@@ -6,6 +6,7 @@ import 'react-tabs/style/react-tabs.css'
 import Button from '../components/Button'
 import Error from '../components/Error'
 import FlashCard from '../components/FlashCard'
+import FlashCardForm from '../components/FlashCardForm'
 import FlashCardItem from '../components/FlashCardItem'
 import FlashCards from '../components/FlashCards'
 import Header from '../components/Header'
@@ -24,6 +25,11 @@ export default function FlashCardsPage() {
   const [loading, setLoading] = useState(true)
 
   const [error, setError] = useState('')
+
+  const [createMode, setCreateMode] = useState(true)
+
+  const [selecedTab, setSelectedTab] = useState(0)
+  const [selectedFlashCard, setSelectedFlashCard] = useState(null)
 
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true)
 
@@ -83,7 +89,17 @@ export default function FlashCardsPage() {
   }
 
   function handleDeleteFlashCard(cardId) {
-    
+    setAllCards(allCards.filter(card => card.id !== cardId))
+  }
+
+  function handleEditFlashCard(card) {
+    setCreateMode(false)
+    setSelectedTab(1)
+    setSelectedFlashCard(card)
+  }
+
+  function handleTabSelected(tabIndex) {
+    setSelectedTab(tabIndex)
   }
 
   let mainJsx = (
@@ -100,7 +116,7 @@ export default function FlashCardsPage() {
     mainJsx = (
       <>
 
-        <Tabs>
+        <Tabs selectedIndex={selecedTab} onSelect={handleTabSelected}>
           <TabList>
             <Tab>Listagem</Tab>
             <Tab>Cadastro</Tab>
@@ -109,11 +125,19 @@ export default function FlashCardsPage() {
 
           <TabPanel>
             {allCards.map(flashCard => {
-              return <FlashCardItem key={flashCard.id} onDelete={handleDeleteFlashCard}>{flashCard}</FlashCardItem>
+              return (
+                <FlashCardItem
+                  key={flashCard.id}
+                  onDelete={handleDeleteFlashCard}
+                  onEdit={handleEditFlashCard}
+                >
+                  {flashCard}
+                </FlashCardItem>
+              )
             })}
           </TabPanel>
           <TabPanel>
-            Cadastro
+            <FlashCardForm createMode={createMode}></FlashCardForm>
           </TabPanel>
           <TabPanel>
             <div className="text-center mb-4">

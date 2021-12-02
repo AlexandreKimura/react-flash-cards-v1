@@ -10,6 +10,12 @@ export default function FlashCardItem({children: flashCard, onDelete = null, onE
     }
   }
 
+  function handleEditIconClick() {
+    if(onEdit) {
+      onEdit(flashCard)
+    }
+  }
+
   return(
     <div className="border p-2 m-2">
       <ul className="flex flex-col space-y-4">
@@ -22,7 +28,7 @@ export default function FlashCardItem({children: flashCard, onDelete = null, onE
       </ul>
 
       <div className="mt-4 flex flex-row items-center justify-end space-x-4">
-        <EditIcon className="cursor-pointer" size={24}/>
+        <EditIcon onClick={handleEditIconClick} className="cursor-pointer" size={24}/>
         <DeleteIcon onClick={handleDeleteIconClick} className="cursor-pointer" size={24}/>
       </div>
     </div>

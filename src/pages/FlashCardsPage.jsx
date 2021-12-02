@@ -107,6 +107,14 @@ export default function FlashCardsPage() {
     setSelectedFlashCard(null)
   }
 
+  function handlePersist(createMode, title, description) {
+    if(createMode) {
+
+    }else {
+      
+    }
+  }
+
   let mainJsx = (
     <div className="flex justify-center mt-4">
       <Loading />
@@ -145,7 +153,7 @@ export default function FlashCardsPage() {
             <div className="my-4">
               <Button onButtonClick={handleNewFlashCard}>Novo Flash Card</Button>
             </div>
-            <FlashCardForm createMode={createMode}></FlashCardForm>
+            <FlashCardForm createMode={createMode} onPersist={handlePersist}></FlashCardForm>
           </TabPanel>
           <TabPanel>
             <div className="text-center mb-4">

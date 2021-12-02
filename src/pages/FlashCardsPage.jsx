@@ -14,8 +14,7 @@ import Loading from '../components/Loading'
 import Main from '../components/Main'
 import RadioButton from '../components/RadioButton'
 import { helperShuffleArray } from '../helpers/arrayHelpers'
-import { apiDeleteFlashCard, getAllFlashCardsApi } from '../service/apiService'
-import { getNewId } from '../service/idService'
+import { apiCreateFlashCard, apiDeleteFlashCard, apiEditFlashCard, getAllFlashCardsApi } from '../service/apiService'
 
 export default function FlashCardsPage() {
 
@@ -94,6 +93,7 @@ export default function FlashCardsPage() {
       await apiDeleteFlashCard(cardId)
 
       setAllCards(allCards.filter(card => card.id !== cardId))
+      setError('')
     }catch(err) {
       setError(err.message)
     }
@@ -114,20 +114,35 @@ export default function FlashCardsPage() {
     setSelectedFlashCard(null)
   }
 
-  function handlePersist(title, description) {
+  async function handlePersist(title, description) {
     if(createMode) {
-      setAllCards([...allCards, {id: getNewId(), title, description}])
-    }else {
-      setAllCards(allCards.map((card) => {
-        if(card.id === selectedFlashCard.id) {
-          return { ...card, title, description }
-        }
-        return card
-      }))
-    }
+      try {
+        const newFlashCard = await apiCreateFlashCard(title, description)
 
-    setSelectedFlashCard(null)
-    setCreateMode(true)
+        setAllCards([...allCards, newFlashCard])
+        setError('')
+      }catch(err) {
+        setError(err.message)
+      }
+      
+    }else {
+      try {
+        await apiEditFlashCard(selectedFlashCard.id, title, description)
+
+        setAllCards(allCards.map((card) => {
+          if(card.id === selectedFlashCard.id) {
+            return { ...card, title, description }
+          }
+          return card
+        }))
+
+        setSelectedFlashCard(null)
+        setCreateMode(true)
+        setError('')
+      }catch(err) {
+        setError(err.message)
+      }
+    }
   }
 
   let mainJsx = (
@@ -140,7 +155,7 @@ export default function FlashCardsPage() {
     mainJsx = <Error>{error}</Error>
   }
 
-  if(!loading) {
+  if(!loading && !error) {
     mainJsx = (
       <>
 

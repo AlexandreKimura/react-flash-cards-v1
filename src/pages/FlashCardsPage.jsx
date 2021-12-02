@@ -14,7 +14,7 @@ import Loading from '../components/Loading'
 import Main from '../components/Main'
 import RadioButton from '../components/RadioButton'
 import { helperShuffleArray } from '../helpers/arrayHelpers'
-import { getAllFlashCardsApi } from '../service/apiService'
+import { apiDeleteFlashCard, getAllFlashCardsApi } from '../service/apiService'
 import { getNewId } from '../service/idService'
 
 export default function FlashCardsPage() {
@@ -89,8 +89,14 @@ export default function FlashCardsPage() {
     setStudyCards(updatedCards)
   }
 
-  function handleDeleteFlashCard(cardId) {
-    setAllCards(allCards.filter(card => card.id !== cardId))
+  async function handleDeleteFlashCard(cardId) {
+    try {
+      await apiDeleteFlashCard(cardId)
+
+      setAllCards(allCards.filter(card => card.id !== cardId))
+    }catch(err) {
+      setError(err.message)
+    }
   }
 
   function handleEditFlashCard(card) {
@@ -112,8 +118,16 @@ export default function FlashCardsPage() {
     if(createMode) {
       setAllCards([...allCards, {id: getNewId(), title, description}])
     }else {
-
+      setAllCards(allCards.map((card) => {
+        if(card.id === selectedFlashCard.id) {
+          return { ...card, title, description }
+        }
+        return card
+      }))
     }
+
+    setSelectedFlashCard(null)
+    setCreateMode(true)
   }
 
   let mainJsx = (

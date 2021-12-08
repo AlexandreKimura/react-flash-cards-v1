@@ -1,7 +1,12 @@
 import axios from "axios";
 
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3001"
+    : "https://flashcardsigti.glitch.me";
+
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: BASE_URL,
   timeout: 10000,
 });
 

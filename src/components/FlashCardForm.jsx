@@ -9,8 +9,8 @@ export default function FlashCardForm({createMode = true, onPersist = null, chil
   const backgroundClassName = createMode ? 'bg-green-100' : 'bg-yellow-100'
 
   const [title, setTitle] = useState(flashCard?.title || '')
-  const[description, setDescription] = useState(flashCard?.description || '')
-  const[error, setError] = useState('')
+  const [description, setDescription] = useState(flashCard?.description || '')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if(createMode) {
